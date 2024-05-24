@@ -1,15 +1,8 @@
 package quizApp;
 import java.sql.*;
-
 class Question {
     int id;
-    String questionText;
-    String optionA;
-    String optionB;
-    String optionC;
-    String optionD;
-    String correctOption;
-
+    String questionText,optionA,optionB,optionC,optionD,correctOption;
     public Question(int id, String questionText, String optionA, String optionB, String optionC, String optionD, String correctOption) {
         this.id = id;
         this.questionText = questionText;
@@ -65,11 +58,8 @@ class Question {
                 questions[index++] = new Question(currque, questionText, optionA, optionB, optionC, optionD, correctopt);
 
             }
-        } catch (ClassNotFoundException ce) {
-            System.out.println(ce);
-        }
-        catch (SQLException e) {
-            System.out.println(e);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return questions;
     }

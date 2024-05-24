@@ -3,19 +3,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 public class HomePage implements ActionListener{
-
     JFrame frame;
-    JLabel lHome, ltailmsg;
-    JButton btnadmin, btnguest;
-
+    JLabel lHome, ltailmsg,lShowResults,lResultClick;
+    JButton btnadmin, btnguest,btnResult,btnshow;
     HomePage(){
         // Initialize the frame
         frame = new JFrame("Home Page");
-        frame.setLocation(200, 100);
+        frame.setLocation(350, 150);
         frame.setSize(800, 600);
         frame.setLayout(null);
+        frame.getContentPane().setBackground(Color.LIGHT_GRAY);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         lHome = new JLabel("WELCOME");
@@ -25,8 +23,7 @@ public class HomePage implements ActionListener{
         lHome.setForeground(Color.RED);
         frame.add(lHome);
 
-
-         ltailmsg = new JLabel("@project for TA silicon University");
+         ltailmsg = new JLabel("@project for TA Silicon University");
          ltailmsg.setBounds(300, 300, 200, 30);
          frame.add(ltailmsg);
 
@@ -40,6 +37,24 @@ public class HomePage implements ActionListener{
         btnguest.addActionListener(this);
         frame.add(btnguest);
 
+        lResultClick = new JLabel("Click me to show your result");
+        lResultClick.setBounds(110, 450, 200, 30);
+        frame.add(lResultClick);
+
+        btnResult = new JButton("Click");
+        btnResult.setBounds(30, 450, 70, 30);
+        btnResult.addActionListener(this);
+        frame.add(btnResult);
+
+        lShowResults = new JLabel("Show all student results");
+        lShowResults.setBounds(110, 500, 200, 30);
+        frame.add(lShowResults);
+
+        btnshow = new JButton("Show");
+        btnshow.setBounds(30, 500, 70, 30);
+        btnshow.addActionListener(this);
+        frame.add(btnshow);
+
         frame.setVisible(true);
     }
     public void actionPerformed(ActionEvent ae){
@@ -50,9 +65,13 @@ public class HomePage implements ActionListener{
             System.out.println("Btn guest is clicked!!!");
             frame.dispose();
             new QuizStart();
+        } else if (ae.getSource().equals(btnResult)) {
+            frame.dispose();
+            new ResultCheck();
+        }else if (ae.getSource().equals(btnshow)) {
+            new Table();
         }
     }
-
     public static void main(String[] args) {
 
         new HomePage();

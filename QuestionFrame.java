@@ -3,48 +3,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
-
- class QuestionFrame implements ActionListener {
+public class QuestionFrame implements ActionListener {
     JFrame frame;
-    JLabel questionLabel;
-    JLabel questionNumberLabel;
-    JLabel attemptedLabel;
-    JLabel notAttemptedLabel;
-    JPanel centerPanel;
-    JRadioButton option1;
-    JRadioButton option2;
-    JRadioButton option3;
-    JRadioButton option4;
+    JLabel questionLabel,questionNumberLabel,attemptedLabel,notAttemptedLabel;
+    JPanel centerPanel,northPanel,westPanel,eastPanel,southPanel;
+    JRadioButton option1,option2,option3,option4;
     ButtonGroup optionGroup;
-    int cid;
-    int numberOfQuestion;
-    int currentQuestionNumber = 1;
-    int attemptedQuestions = 0;
-    int notAttemptedQuestions;
-    int correctAnswer=0;
-    JPanel northPanel;
-    JPanel westPanel;
-    JPanel eastPanel;
-    JPanel southPanel;
+    int cid,numberOfQuestion,currentQuestionNumber = 1, attemptedQuestions = 0,notAttemptedQuestions,correctAnswer=0;
     JButton[] questionButtons;
     int[] attempted;
-    private String[] givenAnswers;
-    private boolean[] isAttempted;
+    private final String[] givenAnswers;
+    private final boolean[] isAttempted;
 
     Question[] questions;
-     QuestionFrame(int numberOfQuestion, int time,String name,String roll,String email) {
+    CandidateInfo candidateInfos;
+    public QuestionFrame(int numberOfQuestion, int time,int cid) {
         //Initialization of all the important part
+        this.cid=cid;
         this.numberOfQuestion = numberOfQuestion;
         notAttemptedQuestions = numberOfQuestion;
         attempted = new int[numberOfQuestion];
         givenAnswers = new String[numberOfQuestion];
         isAttempted = new boolean[numberOfQuestion];
         questions = Question.fetchQuestions(numberOfQuestion);
+        candidateInfos=CandidateInfo.fetchCandidateDetails(cid);
 
         // Create JFrame
         frame = new JFrame("Quiz Interface");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create main panel
         JPanel mainPanel = new JPanel();
@@ -103,8 +88,10 @@ import java.sql.*;
             public void actionPerformed(ActionEvent e) {
                 remainingSeconds--;
                 if (remainingSeconds < 0) {
-                    //when dispose, dispose here also
                     JOptionPane.showMessageDialog(frame, "Quiz submitted successfully!");
+                    candidateInfos.setCorrect(correctAnswer,cid);
+                    frame.dispose();
+                    new Result(cid);
                     return;
                 }
                 int minutes = remainingSeconds / 60;
@@ -116,9 +103,9 @@ import java.sql.*;
         timer.start();
 
         // Add labels for name, email, and roll number to the west panel
-        JLabel nameLabel = new JLabel("Name: "+name);
-        JLabel emailLabel = new JLabel("Email: "+email);
-        JLabel rollNoLabel = new JLabel("Roll No: "+roll);
+        JLabel nameLabel = new JLabel("Name: "+candidateInfos.getName());
+        JLabel emailLabel = new JLabel("Email: "+candidateInfos.getEmail());
+        JLabel rollNoLabel = new JLabel("Roll No: "+candidateInfos.getRollNo());
 
         // Set fonts for labels
         nameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -241,7 +228,7 @@ import java.sql.*;
         eastPanel.add(scrollPaneq, BorderLayout.CENTER);
         eastPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        // Add "Next", "Previous", and "Submit" buttons to the south panel
+        //south panel
         JButton nextButton = new JButton("Save & Next");
         nextButton.addActionListener(this);
         JButton previousButton = new JButton("Previous");
@@ -278,31 +265,30 @@ import java.sql.*;
         centerHolderPanel.add(rightSeparator, BorderLayout.EAST);
         centerHolderPanel.add(centerPanel, BorderLayout.CENTER);
 
-        // Add the centerHolderPanel to the mainPanel
         mainPanel.add(centerHolderPanel, BorderLayout.CENTER);
 
-        // Wrap the main panel in a JScrollPane and add the main panel to it
         JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); // Show vertical scrollbar always
 
-        // Add JScrollPane to JFrame
         frame.getContentPane().add(scrollPane);
 
         frame.setBounds(0, 0, 1540, 820);
 
-        // Make the frame visible
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
         String GivenAnswer = "";
-        int direction = 0;
+        int direction=0;
 
-        switch (command) {
+        switch(command){
             case "Submit":
-                JOptionPane.showMessageDialog(frame, "Quiz submitted successfully!"+ "\nMark : "+correctAnswer);
+                JOptionPane.showMessageDialog(frame, "Quiz submitted successfully!");
+                candidateInfos.setCorrect(correctAnswer,cid);
                 frame.dispose();
+                new Result(cid);
                 // Additional submission logic
                 break;
             case "Previous":
@@ -393,19 +379,8 @@ import java.sql.*;
             }
         }
     }
-
-
-
-
-
-
-
-    // Method to clear radio button selection
-    public void clearSelection() {
+    private void clearSelection() {
         optionGroup.clearSelection();
     }
 
-//    public static void main(String[] args) {
-//        new QuestionFrame(1, 60);
-//    }
 }
