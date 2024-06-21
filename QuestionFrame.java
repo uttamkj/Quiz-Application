@@ -281,7 +281,7 @@ public class QuestionFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
         String GivenAnswer = "";
-        int direction=0;
+        int direction;
 
         switch(command){
             case "Submit":
@@ -289,7 +289,6 @@ public class QuestionFrame implements ActionListener {
                 candidateInfos.setCorrect(correctAnswer,cid);
                 frame.dispose();
                 new Result(cid);
-                // Additional submission logic
                 break;
             case "Previous":
                 direction = -1;
@@ -318,7 +317,6 @@ public class QuestionFrame implements ActionListener {
                         attemptedQuestions++;
                         notAttemptedQuestions--;
                     } else if (!GivenAnswer.equals(givenAnswers[currentQuestionNumber - 1])) {
-                        // Handle the case where the answer is changed.
                         if (givenAnswers[currentQuestionNumber - 1].equals(questions[currentQuestionNumber - 1].getCorrectOption())) {
                             correctAnswer--;
                         }
@@ -347,10 +345,9 @@ public class QuestionFrame implements ActionListener {
     }
 
     private void updateQuestionDisplay() {
-        // Update question text
+        // Update question
         questionLabel.setText(currentQuestionNumber + ": " + questions[currentQuestionNumber - 1].getQuestionText());
 
-        // Update options text
         option1.setText("A." + questions[currentQuestionNumber - 1].getOptionA());
         option2.setText("B." + questions[currentQuestionNumber - 1].getOptionB());
         option3.setText("C." + questions[currentQuestionNumber - 1].getOptionC());

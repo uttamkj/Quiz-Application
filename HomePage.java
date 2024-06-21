@@ -37,7 +37,7 @@ public class HomePage implements ActionListener{
         btnguest.addActionListener(this);
         frame.add(btnguest);
 
-        lResultClick = new JLabel("Click me to show your result");
+       lResultClick = new JLabel("Click me to show your result");
         lResultClick.setBounds(110, 450, 200, 30);
         frame.add(lResultClick);
 
@@ -45,7 +45,7 @@ public class HomePage implements ActionListener{
         btnResult.setBounds(30, 450, 70, 30);
         btnResult.addActionListener(this);
         frame.add(btnResult);
-
+/*
         lShowResults = new JLabel("Show all student results");
         lShowResults.setBounds(110, 500, 200, 30);
         frame.add(lShowResults);
@@ -54,6 +54,7 @@ public class HomePage implements ActionListener{
         btnshow.setBounds(30, 500, 70, 30);
         btnshow.addActionListener(this);
         frame.add(btnshow);
+        */
 
         frame.setVisible(true);
     }
